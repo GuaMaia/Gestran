@@ -1,0 +1,30 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.FMTBcd, Data.DB, Data.SqlExpr,
+  Datasnap.Provider, Datasnap.DBClient, Data.Win.ADODB;
+
+type
+  TFRrelVendas = class(TForm)
+    ADOQuery1: TADOQuery;
+    ClientDataSet1: TClientDataSet;
+    DataSetProvider1: TDataSetProvider;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FRrelVendas: TFRrelVendas;
+
+implementation
+
+{$R *.dfm}
+
+uses UConexao;
+
+end.

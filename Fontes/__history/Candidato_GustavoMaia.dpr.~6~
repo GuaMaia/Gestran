@@ -1,0 +1,17 @@
+program Candidato_GustavoMaia;
+
+uses
+  Vcl.Forms,
+  UConexao in '..\Fontes\UConexao.pas' {dmConexao: TDataModule},
+  UFrame_Relatorio in 'UFrame_Relatorio.pas' {FFrame_Relatorio: TFrame},
+  URelVendas in 'URelVendas.pas' {FRelVendas};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TdmConexao, dmConexao);
+  Application.CreateForm(TFRelVendas, FRelVendas);
+  Application.Run;
+end.

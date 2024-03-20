@@ -1,0 +1,128 @@
+object FRrelVendas: TFRrelVendas
+  Left = 0
+  Top = 0
+  BorderIcons = []
+  BorderStyle = bsNone
+  Caption = 'FRrelVendas'
+  ClientHeight = 480
+  ClientWidth = 640
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  KeyPreview = True
+  TextHeight = 15
+  inline FFrame_Relatorio1: TFFrame_Relatorio
+    Left = 0
+    Top = 0
+    Width = 640
+    Height = 50
+    Align = alTop
+    TabOrder = 0
+    ExplicitTop = 64
+  end
+  object adoRelVendas: TADOQuery
+    Connection = dmConexao.Conexao
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'WITH VendasComComissao AS ('
+      '    SELECT '
+      '        ID_VENDEDOR,'
+      '        SUM(VALOR_TOTAL) AS TOTAL_VENDAS,'
+      
+        '        ROW_NUMBER() OVER (ORDER BY SUM(VALOR_TOTAL - VALOR_DESC' +
+        'ONTO) ASC) AS RankingMenorValor,'
+      
+        '        ROW_NUMBER() OVER (ORDER BY SUM(VALOR_TOTAL - VALOR_DESC' +
+        'ONTO) DESC) AS RankingMaiorValor'
+      '    FROM VENDA'
+      '    GROUP BY ID_VENDEDOR'
+      '),'
+      'Comissao AS ('
+      '    SELECT '
+      '        ID_VENDEDOR,'
+      '        CASE '
+      '            WHEN RankingMenorValor = 1 THEN 0.05'
+      '            WHEN RankingMenorValor = 2 THEN 0.1'
+      '            ELSE 0'
+      '        END AS TaxaComissaoMenorValor,'
+      '        CASE '
+      
+        '            WHEN RankingMaiorValor = 1 THEN (0.1 * TOTAL_VENDAS)' +
+        ' + (0.2 * (0.1 * TOTAL_VENDAS))'
+      '            ELSE 0'
+      '        END AS ValorComissaoMaiorValor'
+      '    FROM VendasComComissao'
+      ')'
+      'SELECT '
+      '    V.ID,'
+      '    V.DATA,'
+      '    V.ID_VENDEDOR,'
+      '    V.VALOR_VENDA,'
+      '    V.VALOR_DESCONTO,'
+      '    V.VALOR_TOTAL,'
+      '    CASE '
+      
+        '        WHEN C.TaxaComissaoMenorValor > 0 THEN V.VALOR_TOTAL * C' +
+        '.TaxaComissaoMenorValor'
+      
+        '        WHEN C.ValorComissaoMaiorValor > 0 THEN C.ValorComissaoM' +
+        'aiorValor'
+      '        ELSE 0'
+      '    END AS Comissao'
+      'FROM VENDA V'
+      'LEFT JOIN Comissao C ON V.ID_VENDEDOR = C.ID_VENDEDOR;')
+    Left = 144
+    Top = 16
+  end
+  object cdsRelVendas: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dspRelVendas'
+    Left = 208
+    Top = 16
+    object cdsRelVendasID: TIntegerField
+      FieldName = 'ID'
+    end
+    object cdsRelVendasDATA: TDateTimeField
+      FieldName = 'DATA'
+    end
+    object cdsRelVendasID_VENDEDOR: TIntegerField
+      FieldName = 'ID_VENDEDOR'
+    end
+    object cdsRelVendasVALOR_VENDA: TBCDField
+      FieldName = 'VALOR_VENDA'
+      Precision = 12
+      Size = 3
+    end
+    object cdsRelVendasVALOR_DESCONTO: TBCDField
+      FieldName = 'VALOR_DESCONTO'
+      Precision = 12
+      Size = 3
+    end
+    object cdsRelVendasVALOR_TOTAL: TBCDField
+      FieldName = 'VALOR_TOTAL'
+      Precision = 12
+      Size = 3
+    end
+    object cdsRelVendasComissao: TFMTBCDField
+      FieldName = 'Comissao'
+      ReadOnly = True
+      Precision = 38
+      Size = 4
+    end
+  end
+  object dspRelVendas: TDataSetProvider
+    DataSet = adoRelVendas
+    Left = 176
+    Top = 16
+  end
+  object dsRelVendas: TDataSource
+    DataSet = cdsRelVendas
+    Left = 240
+    Top = 16
+  end
+end

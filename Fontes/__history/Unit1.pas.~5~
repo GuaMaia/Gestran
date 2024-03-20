@@ -1,0 +1,38 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.FMTBcd, Data.DB, Data.SqlExpr,
+  Datasnap.Provider, Datasnap.DBClient, Data.Win.ADODB, UFrame_Relatorio;
+
+type
+  TFRrelVendas = class(TForm)
+    adoRelVendas: TADOQuery;
+    cdsRelVendas: TClientDataSet;
+    dspRelVendas: TDataSetProvider;
+    FFrame_Relatorio1: TFFrame_Relatorio;
+    cdsRelVendasID: TIntegerField;
+    cdsRelVendasDATA: TDateTimeField;
+    cdsRelVendasID_VENDEDOR: TIntegerField;
+    cdsRelVendasVALOR_VENDA: TBCDField;
+    cdsRelVendasVALOR_DESCONTO: TBCDField;
+    cdsRelVendasVALOR_TOTAL: TBCDField;
+    cdsRelVendasComissao: TFMTBCDField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FRrelVendas: TFRrelVendas;
+
+implementation
+
+{$R *.dfm}
+
+uses UConexao;
+
+end.

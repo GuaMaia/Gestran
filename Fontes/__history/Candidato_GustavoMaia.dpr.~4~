@@ -1,0 +1,19 @@
+program Candidato_GustavoMaia;
+
+uses
+  Vcl.Forms,
+  Umodulo in 'Umodulo.pas' {Dm: TDataModule},
+  UConexao in 'UConexao.pas' {dmConexao: TDataModule},
+  Unit1 in 'Unit1.pas' {Form1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TDm, Dm);
+  Application.CreateForm(TdmConexao, dmConexao);
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.
